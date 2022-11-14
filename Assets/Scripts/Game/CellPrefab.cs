@@ -8,6 +8,7 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells
         private Spawner _spawner;
         private int _indexCell;
         private GrowthStatus _currentStatus;
+        private PlantType _currentType;
 
         public void SetInfoCell(Spawner spawner, int index)
         {
@@ -28,10 +29,11 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells
             return _indexCell;
         }
 
-        public void Click(out int index, out GrowthStatus currentStatus)
+        public void Click(out int index, out GrowthStatus currentStatus, out PlantType type)
         {
             currentStatus = _currentStatus;
             index = _indexCell;
+            type = _currentType;
         }
 
         public Transform GetTransform()
@@ -42,6 +44,11 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells
         public void ChangeStatus(GrowthStatus newStatus)
         {
             _currentStatus = newStatus;
+        }
+
+        public void SetPlantType(PlantType plant)
+        {
+            _currentType = plant;
         }
 
         public GrowthStatus GetGrowthStatus()

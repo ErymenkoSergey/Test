@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 947fee20405ea6d4494bc48197040e8e, type: 3}
   m_Name: GameSetting
   m_EditorClassIdentifier: 
-  _cellSize: {x: 5, y: 8}
+  _cellSize: {x: 9, y: 9}
   _plants:
   - PlantType: 1
     GrowthTime: 15
@@ -23,6 +23,6 @@ MonoBehaviour:
     Experience: 30
     UIIcon: {fileID: 2800000, guid: 64bdde9d68c0fce4ebde5640e18ff531, type: 3}
   - PlantType: 3
-    GrowthTime: 120
+    GrowthTime: 60
     Experience: 100
     UIIcon: {fileID: 2800000, guid: 43833fe5ea454794b9473e2039041a77, type: 3}

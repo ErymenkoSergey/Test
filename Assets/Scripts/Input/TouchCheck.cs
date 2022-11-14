@@ -60,7 +60,10 @@ namespace Test.LavaProject.Farm.Mechanica_Input
 
                 if (ClickObject.TryGetComponent(out IClickable click))
                 {
-                    click.Click(out int id, out GrowthStatus component);
+                    click.Click(out int id, out GrowthStatus component, out PlantType type);
+
+                    if (type == PlantType.Tree)
+                        return;
 
                     if (component == GrowthStatus.Idle || component == GrowthStatus.None)
                         SetSelectedCell(id);

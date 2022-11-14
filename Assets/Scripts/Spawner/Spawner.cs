@@ -111,8 +111,9 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner
 
         public void StartDisembarkation()
         {
+            _gameProcess.StartDisembarkation(_currentSelectedCell, out PlantType type);
             _cells[_currentSelectedCell].ChangeStatus(GrowthStatus.Growth);
-            _gameProcess.StartDisembarkation(_currentSelectedCell);
+            _cells[_currentSelectedCell].SetPlantType(type);
         }
 
         public Transform GetTransformFarmer()

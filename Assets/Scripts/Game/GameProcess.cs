@@ -87,11 +87,11 @@ namespace Test.LavaProject.Farm.Mechanica.MainProcess.Game
             _cameraControl.SetGameObject(farmerPos);
         }
 
-        public void StartDisembarkation(int selectedCell)
+        public void StartDisembarkation(int selectedCell, out PlantType type)
         {
+            type = _selectedType;
             SetChecngeChoiseStatus(false);
             _plantingSystem.CreateNewPlant(_selectedType, _selectedTransform, selectedCell);
-
             _cameraControl.CameraZoomCalculation(_selectedTransform.position);
         }
 
