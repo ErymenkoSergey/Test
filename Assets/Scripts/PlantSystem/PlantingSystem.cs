@@ -1,15 +1,12 @@
-using Test.LavaProject.Farm.DI;
 using Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants;
-using Test.LavaProject.Farm.Mechanica_UI;
 using UnityEngine;
-using Zenject;
 
 namespace Test.LavaProject.Farm.Mechanica_Spawner.Planting
 {
-    public class PlantingSystem : MonoBehaviour
+    public class PlantingSystem : MonoBehaviour, IPlantingSystem
     {
-        private SettingGame _settings;
-        private UIPresentor _presentor;
+        [SerializeField] private GameObject _presentor;
+        private IUIPresentor _IUIPresentor;
 
         [SerializeField] private GameObject _prefabCarrotBed;
         [SerializeField] private GameObject _prefabGrassBed;
@@ -19,16 +16,10 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Planting
 
         private Plant[] _plants;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
+        private void Start()
         {
-            _settings = settingGame;
-            _settings.PlantingSystem = this;
-        }
-
-        private void OnEnable()
-        {
-            _presentor = _settings.UIPresentor;
+            if (_presentor.TryGetComponent(out IUIPresentor presentor))
+                _IUIPresentor = presentor;
         }
 
         public void SetData(Plant[] plant)
@@ -38,7 +29,6 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Planting
 
         public void CreateNewPlant(PlantType plant, Transform positionPalnt, int selectedCell)
         {
-
             PlantTile tileCarrots = Instantiate(GetCurrentPrefab(plant), positionPalnt).GetComponent<PlantTile>();
             SetPlaceAndTime(tileCarrots, plant, selectedCell);
         }
@@ -58,7 +48,7 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Planting
         private void SetPlaceAndTime(PlantTile tile, PlantType plant, int selectedCell)
         {
             GetExperience(plant, out int experience, out float time);
-            tile.SetDataPlant(plant, time, experience, _presentor, selectedCell);
+            tile.SetDataPlant(plant, time, experience, _IUIPresentor, selectedCell);
             tile.transform.SetParent(_parrentPlace);
         }
 

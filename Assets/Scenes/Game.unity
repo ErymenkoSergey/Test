@@ -3331,7 +3331,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1708506789}
   - {fileID: 1846450945}
   - {fileID: 1095047872}
   - {fileID: 1743407824}
@@ -3386,7 +3385,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1038835437}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1095047873
 MonoBehaviour:
@@ -3400,6 +3399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71f89d148a309b4c970f939f073d8cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _presentor: {fileID: 1743407823}
   _prefabCarrotBed: {fileID: 890271402311667349, guid: a0d7ba732e09fff4583fb849d7f53dfe, type: 3}
   _prefabGrassBed: {fileID: 395725436160486298, guid: 8cbe98b74013be34ab36f6f897716f78, type: 3}
   _prefabTreeBed: {fileID: 2775219806390089290, guid: 62d5f501021239044bf1a539f1135275, type: 3}
@@ -4672,6 +4672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20396c75389d6534d9ca9d82a9dd1b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameProcess: {fileID: 1846450944}
   _choicePanel: {fileID: 915741519}
   _textExperience: {fileID: 1540251698}
   _textCarrots: {fileID: 1421288921}
@@ -4694,6 +4695,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b0c23200cffd340b5e8477327bae63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameProcess: {fileID: 1846450944}
+  _cameraControl: {fileID: 963194225}
   _inputActions: {fileID: -944628639613478452, guid: 4f1c67d67d1929e4f9c1747d0b49f4b9, type: 3}
 --- !u!4 &1496647455
 Transform:
@@ -5294,83 +5297,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 471366, guid: 49e86d56904ce434e84ead31c131cfbc, type: 3}
   m_PrefabInstance: {fileID: 1700030130}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1708506788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1708506789}
-  - component: {fileID: 1708506792}
-  - component: {fileID: 1708506790}
-  m_Layer: 0
-  m_Name: DIProcess
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1708506789
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708506788}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1038835437}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1708506790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708506788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scriptableObjectInstallers: []
-  _monoInstallers:
-  - {fileID: 1708506792}
-  _installerPrefabs: []
-  _autoRun: 1
-  OnPreInstall:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPostInstall:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPreResolve:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPostResolve:
-    m_PersistentCalls:
-      m_Calls: []
-  _parentNewObjectsUnderSceneContext: 0
-  _contractNames: []
-  _parentContractNames: []
---- !u!114 &1708506792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708506788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c1940f8fb0dfa24291e42348a2d2feb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1715361879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5594,7 +5520,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1038835437}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1743407825
 MonoBehaviour:
@@ -5608,6 +5534,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1754b8aee46c2254bb11b387d0b1321f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawner: {fileID: 1846450944}
+  _cameraControl: {fileID: 963194225}
   _timerPrefab: {fileID: 7824639453617762196, guid: f51ddfc3fea9fbd4f9b1adf07226d36a, type: 3}
   _fieldVisualize: {fileID: 502633115}
 --- !u!1001 &1763004013
@@ -5860,7 +5788,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1038835437}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1846450946
 MonoBehaviour:
@@ -5875,6 +5803,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameConfig: {fileID: 11400000, guid: 15449a4606a39724a909d988a3d5d022, type: 2}
+  _uIPresentor: {fileID: 1743407823}
+  _spawner: {fileID: 1846450944}
+  _cameraControl: {fileID: 963194225}
+  _plantingSystem: {fileID: 1095047871}
 --- !u!114 &1846450947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5887,6 +5819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9348fbc21c20d488c03409443ef7d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameProcess: {fileID: 1846450944}
   _navMeshSurface: {fileID: 1874501461}
   _farmerPrefab: {fileID: 100022, guid: 2c972239f8d58d944a0e1cff0da4ac22, type: 3}
   _startPointFarmer: {fileID: 871510528}

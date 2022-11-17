@@ -1,18 +1,15 @@
 using System.Collections.Generic;
-using Test.LavaProject.Farm.DI;
 using Test.LavaProject.Farm.Mechanica.AI;
-using Test.LavaProject.Farm.Mechanica.MainProcess.Game;
 using Test.LavaProject.Farm.Mechanica_Spawner.Cells;
 using UnityEngine;
 using UnityEngine.AI;
-using Zenject;
 
 namespace Test.LavaProject.Farm.Mechanica_Spawner
 {
-    public class Spawner : MonoBehaviour
+    public class Spawner : MonoBehaviour, ISpawn
     {
-        private SettingGame _settingGame;
-        private GameProcess _gameProcess;
+        [SerializeField] private GameObject _gameProcess;
+        private IGameProcess _iGameProcess;
 
         [SerializeField] private NavMeshSurface _navMeshSurface;
         [SerializeField] private GameObject _farmerPrefab;
@@ -31,16 +28,15 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner
         private Farmer _farmer;
         private int _currentSelectedCell;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
+        private void Awake()
         {
-            _settingGame = settingGame;
-            _settingGame.Spawner = this;
+            CreateGameProcess();
         }
 
-        private void OnEnable()
+        private void CreateGameProcess()
         {
-            _gameProcess = _settingGame.GameProcess;
+            if (_gameProcess.TryGetComponent(out IGameProcess process))
+                _iGameProcess = process;
         }
 
         public void SetGameConfiguration(Vector2 vector)
@@ -60,7 +56,8 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner
         public void RegisterFarmer(Farmer farmer)
         {
             _farmer = farmer;
-            _gameProcess.SetTransformFarmer(_farmer.GetFarmerPosition());
+
+            _iGameProcess.SetTransformFarmer(_farmer.GetFarmerPosition());
         }
 
         private void CreateField()
@@ -111,7 +108,7 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner
 
         public void StartDisembarkation()
         {
-            _gameProcess.StartDisembarkation(_currentSelectedCell, out PlantType type);
+            _iGameProcess.StartDisembarkation(_currentSelectedCell, out PlantType type);
             _cells[_currentSelectedCell].ChangeStatus(GrowthStatus.Growth);
             _cells[_currentSelectedCell].SetPlantType(type);
         }
@@ -136,7 +133,7 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner
         public void StartHarvesting()
         {
             _cells[_currentSelectedCell].ChangeStatus(GrowthStatus.Idle);
-            _gameProcess.PickUpHarvest(_currentSelectedCell);
+            _iGameProcess.PickUpHarvest(_currentSelectedCell);
         }
     }
 }

@@ -1,55 +1,59 @@
 using Test.LavaProject.Farm.Data;
-using Test.LavaProject.Farm.DI;
 using Test.LavaProject.Farm.Mechanica.Score;
 using Test.LavaProject.Farm.Mechanica_Input;
-using Test.LavaProject.Farm.Mechanica_Spawner;
-using Test.LavaProject.Farm.Mechanica_Spawner.Planting;
-using Test.LavaProject.Farm.Mechanica_UI;
 using UnityEngine;
-using Zenject;
 
 namespace Test.LavaProject.Farm.Mechanica.MainProcess.Game
 {
-    public class GameProcess : MonoBehaviour
+    public class GameProcess : MonoBehaviour, IGameProcess
     {
         [SerializeField] private GameConfiguration _gameConfig;
-        [Inject] private ScoreSystem _scoreSystem;
-
-        private SettingGame _settings;
-        private UIPresentor _uIPresentor;
-        private Spawner _spawner;
+        private ScoreSystem _scoreSystem;
+        [SerializeField] private GameObject _uIPresentor;
+        private IUIPresentor _uiPresentor;
+        [SerializeField] private GameObject _spawner;
+        private ISpawn _iSpawn;
         private TouchCheck _touchCheck;
-        private CameraControl _cameraControl;
-        private PlantingSystem _plantingSystem;
-
+        [SerializeField] private GameObject _cameraControl;
+        private ICameraControl _iCameraControl;
+        [SerializeField] private GameObject _plantingSystem;
+        private IPlantingSystem _iPlantingSystem;
         private int _currentCell;
         private PlantType _selectedType;
         private Transform _selectedTransform;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
-        {
-            _settings = settingGame;
-            _settings.GameProcess = this;
-        }
-
         private void Awake()
         {
-            _spawner = _settings.Spawner;
-            _cameraControl = _settings.CameraControl;
-            _plantingSystem = _settings.PlantingSystem;
-            _uIPresentor = _settings.UIPresentor;
+            SetLinks();
+        }
+
+        private void SetLinks()
+        {
+            if (_cameraControl.TryGetComponent(out ICameraControl camera)) ;
+            _iCameraControl = camera;
+
+            if (_spawner.TryGetComponent(out ISpawn spawn))
+                _iSpawn = spawn;
+
+            if (_uIPresentor.TryGetComponent(out IUIPresentor presentor))
+                _uiPresentor = presentor;
+
+            if (_plantingSystem.TryGetComponent(out IPlantingSystem planting))
+                _iPlantingSystem = planting;
+
+            if (_uiPresentor == null)
+                Debug.Log("_uiPresentor null");
         }
 
         private void Start()
         {
-            _spawner.SetGameConfiguration(_gameConfig.CellSize);
+            _iSpawn.SetGameConfiguration(_gameConfig.CellSize);
             SetDataPlantingSystem();
         }
 
         private void SetDataPlantingSystem()
         {
-            _plantingSystem.SetData(_gameConfig.Plants);
+            _iPlantingSystem.SetData(_gameConfig.Plants);
         }
 
         public void SetTouchCheck(TouchCheck touchCheck)
@@ -63,15 +67,21 @@ namespace Test.LavaProject.Farm.Mechanica.MainProcess.Game
             _scoreSystem.OpenChoicePanel(true);
         }
 
+        public void SetScoreSystem(ScoreSystem system)
+        {
+            _scoreSystem = system;
+            _uiPresentor.SetScoreSystem(system);
+        }
+
         public void Harvesting(int index)
         {
             _currentCell = index;
-            _spawner.CheckStatusReady(index);
+            _iSpawn.CheckStatusReady(index);
         }
 
         public void StartPlanting(PlantType type)
         {
-            _spawner.StartPlanting(_currentCell, out Transform point);
+            _iSpawn.StartPlanting(_currentCell, out Transform point);
             _selectedType = type;
             _selectedTransform = point;
         }
@@ -84,21 +94,21 @@ namespace Test.LavaProject.Farm.Mechanica.MainProcess.Game
 
         public void SetTransformFarmer(Transform farmerPos)
         {
-            _cameraControl.SetGameObject(farmerPos);
+            _iCameraControl.SetGameObject(farmerPos);
         }
 
         public void StartDisembarkation(int selectedCell, out PlantType type)
         {
             type = _selectedType;
             SetChecngeChoiseStatus(false);
-            _plantingSystem.CreateNewPlant(_selectedType, _selectedTransform, selectedCell);
-            _cameraControl.CameraZoomCalculation(_selectedTransform.position);
+            _iPlantingSystem.CreateNewPlant(_selectedType, _selectedTransform, selectedCell);
+            _iCameraControl.CameraZoomCalculation(_selectedTransform.position);
         }
 
         public void PickUpHarvest(int cell)
         {
             SetChecngeChoiseStatus(false);
-            _uIPresentor.ReadinessCheck(cell);
+            _uiPresentor.ReadinessCheck(cell);
         }
 
         private void SetChecngeChoiseStatus(bool isEnable)
@@ -120,6 +130,11 @@ namespace Test.LavaProject.Farm.Mechanica.MainProcess.Game
             }
 
             return texture;
+        }
+
+        public IUIPresentor GetUIPresentor()
+        {
+            return _uiPresentor;
         }
     }
 }

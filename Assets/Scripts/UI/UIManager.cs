@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 using TMPro;
-using Test.LavaProject.Farm.Mechanica.MainProcess.Game;
-using Test.LavaProject.Farm.DI;
+using Test.LavaProject.Farm.Mechanica.Score;
 
 namespace Test.LavaProject.Farm.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IUIManager
     {
-        private SettingGame _settings;
-        private GameProcess _gameProcess;
+        [SerializeField] private GameObject _gameProcess;
+        private IGameProcess _iGameProcess;
+
+        private ScoreSystem _scoreSystem;
 
         [SerializeField] private GameObject _choicePanel;
 
@@ -27,13 +27,6 @@ namespace Test.LavaProject.Farm.UI
         [SerializeField] private RawImage _carrotsImage;
         [SerializeField] private RawImage _treeImage;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
-        {
-            _settings = settingGame;
-            _settings.UIManager = this;
-        }
-
         private void OnEnable()
         {
             _closeChoicePanelButton.onClick.AddListener(CloseChoicePanel);
@@ -42,12 +35,22 @@ namespace Test.LavaProject.Farm.UI
             _choiceCarrotsButton.onClick.AddListener(() => ChoicePlant(PlantType.Carrot));
             _choiceTreeButton.onClick.AddListener(() => ChoicePlant(PlantType.Tree));
 
-            _gameProcess = _settings.GameProcess;
+            if (_gameProcess.TryGetComponent(out IGameProcess process))
+                _iGameProcess = process;
+
+
         }
 
         private void Start()
         {
+            CreateScoreSystem();
             SetImageIcons();
+            SetScoreSystem();
+        }
+
+        private void CreateScoreSystem()
+        {
+            _scoreSystem = new ScoreSystem(this);
         }
 
         private void OnDisable()
@@ -72,7 +75,7 @@ namespace Test.LavaProject.Farm.UI
         private void ChoicePlant(PlantType type)
         {
             OpenChoicePanel(false);
-            _gameProcess.StartPlanting(type);
+            _iGameProcess.StartPlanting(type);
         }
 
         public void OpenChoicePanel(bool isOpen)
@@ -83,17 +86,27 @@ namespace Test.LavaProject.Farm.UI
         private void CloseChoicePanel()
         {
             OpenChoicePanel(false);
-            _gameProcess.CancelPlanting();
+            _iGameProcess.CancelPlanting();
         }
 
         private void SetImageIcons()
         {
             GetImageUI imageUI;
-            imageUI = _gameProcess.GetIconPlant;
+            imageUI = _iGameProcess.GetIconPlant;
 
             _grassImage.texture = imageUI(PlantType.Grass);
             _carrotsImage.texture = imageUI(PlantType.Carrot);
             _treeImage.texture = imageUI(PlantType.Tree);
+        }
+
+        public ScoreSystem GetScoreSystem()
+        {
+            return _scoreSystem;
+        }
+
+        private void SetScoreSystem()
+        {
+            _iGameProcess.SetScoreSystem(_scoreSystem);
         }
     }
 }

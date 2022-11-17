@@ -2,7 +2,6 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using System;
-using Test.LavaProject.Farm.Mechanica_UI;
 
 namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants
 {
@@ -10,7 +9,7 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants
     {
         private PlantType _currentPlantType;
 
-        private UIPresentor _uIPresentor;
+        private IUIPresentor _uIPresentor;
 
         [SerializeField] private Transform[] _prefabPlant;
         [SerializeField] private Vector3 _maxSizePrefab;
@@ -21,7 +20,7 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants
         private int _carrotCount;
         private int _selectedCell;
 
-        public void SetDataPlant(PlantType plant, float time, int experience, UIPresentor presentor, int selectedCell)
+        public void SetDataPlant(PlantType plant, float time, int experience, IUIPresentor presentor, int selectedCell)
         {
             _currentPlantType = plant;
             _time = time;

@@ -1,16 +1,16 @@
-using Test.LavaProject.Farm.DI;
-using Test.LavaProject.Farm.Mechanica.MainProcess.Game;
 using Test.LavaProject.Farm.UiInterface;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Zenject;
 
 namespace Test.LavaProject.Farm.Mechanica_Input
 {
     public class TouchCheck : MonoBehaviour
     {
-        private SettingGame _settingGame;
-        private GameProcess _gameProcess;
+        [SerializeField] private GameObject _gameProcess;
+        private IGameProcess _iGameProcess;
+
+        [SerializeField] private GameObject _cameraControl;
+        private ICameraControl _iCameraControl;
         private Camera _camera;
 
         [SerializeField] private InputActionAsset _inputActions;
@@ -19,13 +19,12 @@ namespace Test.LavaProject.Farm.Mechanica_Input
 
         private bool _isChoiseMade;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
+        private void Awake()
         {
-            _settingGame = settingGame;
+            SetLinks();
         }
 
-        private void Awake()
+        private void SetLinks()
         {
             _playerActionMap = _inputActions.FindActionMap("Player");
             _movement = _playerActionMap.FindAction("Touches");
@@ -34,10 +33,26 @@ namespace Test.LavaProject.Farm.Mechanica_Input
             _playerActionMap.Enable();
             _inputActions.Enable();
 
-            _gameProcess = _settingGame.GameProcess;
-            _camera = _settingGame.CameraControl.GetCamera();
+            SetCamera();
 
-            _gameProcess.SetTouchCheck(this);
+            _iGameProcess = SetGameProcess();
+            _iGameProcess.SetTouchCheck(this);
+        }
+
+        private void SetCamera()
+        {
+            if (_cameraControl.TryGetComponent(out ICameraControl control))
+                _iCameraControl = control;
+
+            _camera = _iCameraControl.GetCamera();
+        }
+
+        private IGameProcess SetGameProcess()
+        {
+            if (_gameProcess.TryGetComponent(out IGameProcess gameProcess))  
+                return gameProcess;
+            else
+                return null;
         }
 
         private void HandleMovementAction(InputAction.CallbackContext Context)
@@ -77,13 +92,13 @@ namespace Test.LavaProject.Farm.Mechanica_Input
 
         private void SetSelectedCell(int index)
         {
-            _gameProcess.SetSelectedCell(index);
+            _iGameProcess.SetSelectedCell(index);
             SetChecngeChoiseStatus(true);
         }
 
         private void Harvesting(int index)
         {
-            _gameProcess.Harvesting(index);
+            _iGameProcess.Harvesting(index);
             SetChecngeChoiseStatus(true);
         }
 

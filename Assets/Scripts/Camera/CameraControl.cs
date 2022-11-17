@@ -1,17 +1,13 @@
 using UnityEngine;
-using Zenject;
 using DG.Tweening;
 using System.Collections;
-using Test.LavaProject.Farm.DI;
 
 namespace Test.LavaProject.Farm.Mechanica
 {
     [RequireComponent(typeof(Camera))]
-    public class CameraControl : MonoBehaviour
+    public class CameraControl : MonoBehaviour, ICameraControl
     {
         [SerializeField] private Camera _camera;
-
-        private SettingGame _settings;
 
         private Transform _player;
 
@@ -23,13 +19,6 @@ namespace Test.LavaProject.Farm.Mechanica
         private float _timeFlyToGarden = 2f;
 
         private Vector3 _cameraApproachPosition = new Vector3(1.5f, -1, 1.5f);
-
-        [Inject]
-        public void Construct(SettingGame settingGame)
-        {
-            _settings = settingGame;
-            _settings.CameraControl = this;
-        }
 
         public void SetGameObject(Transform gameObject)
         {
@@ -51,11 +40,6 @@ namespace Test.LavaProject.Farm.Mechanica
             _currentPosition = transform.position = _player.position + _defaultPosition;
         }
 
-        public Camera GetCamera()
-        {
-            return _camera;
-        }
-
         public void CameraZoomCalculation(Vector3 posCam)
         {
             Vector3 endPos = posCam - _cameraApproachPosition;
@@ -73,6 +57,11 @@ namespace Test.LavaProject.Farm.Mechanica
         private void SetIsPlayerEnable(bool isEnable)
         {
             _isPlayerEnable = isEnable;
+        }
+
+        public Camera GetCamera()
+        {
+            return _camera;
         }
     }
 }

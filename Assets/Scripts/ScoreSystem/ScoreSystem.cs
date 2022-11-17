@@ -1,25 +1,14 @@
-using Test.LavaProject.Farm.DI;
 using Test.LavaProject.Farm.UI;
-using Zenject;
 
 namespace Test.LavaProject.Farm.Mechanica.Score
 {
     public class ScoreSystem
     {
-        private SettingGame _settingGame;
         private UIManager _uImanager;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
+        public ScoreSystem(UIManager uIManager)
         {
-            _settingGame = settingGame;
-
-            SetUiManager();
-        }
-
-        private void SetUiManager()
-        {
-            _uImanager = _settingGame.UIManager;
+            _uImanager = uIManager;
         }
 
         private int _experience;
@@ -48,12 +37,6 @@ namespace Test.LavaProject.Farm.Mechanica.Score
         public void OpenChoicePanel(bool isOpen)
         {
             _uImanager.OpenChoicePanel(isOpen);
-        }
-
-        private void DellData()
-        {
-            _experience = 0;
-            _carrots = 0;
         }
     }
 }

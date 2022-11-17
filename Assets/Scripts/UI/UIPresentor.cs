@@ -1,21 +1,22 @@
-using Test.LavaProject.Farm.Mechanica_Spawner;
 using Test.LavaProject.Farm.Mechanica.Score;
 using Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants;
-using Test.LavaProject.Farm.DI;
 using Test.LavaProject.Farm.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using Zenject;
-
 
 namespace Test.LavaProject.Farm.Mechanica_UI
 {
-    public class UIPresentor : MonoBehaviour
+    public class UIPresentor : MonoBehaviour, IUIPresentor
     {
-        private SettingGame _settings;
-        [Inject] private ScoreSystem _scoreSystem;
-        private Spawner _spawner;
+        private ScoreSystem _scoreSystem;
+
+        [SerializeField] private GameObject _spawner;
+        private ISpawn _iSpawn;
+
+        [SerializeField] private GameObject _cameraControl;
+        private ICameraControl _iCameraControl;
+
         private Camera _camera;
 
         [SerializeField] private GameObject _timerPrefab;
@@ -26,22 +27,20 @@ namespace Test.LavaProject.Farm.Mechanica_UI
 
         private float _fps = 60f;
 
-        [Inject]
-        public void Construct(SettingGame settingGame)
-        {
-            _settings = settingGame;
-            _settings.UIPresentor = this;
-        }
-
-        private void Awake()
+        private void Start()
         {
             SetLinks();
         }
 
         private void SetLinks()
         {
-            _camera = _settings.CameraControl.GetCamera();
-            _spawner = _settings.Spawner;
+            if (_spawner.TryGetComponent(out ISpawn spawn))
+                _iSpawn = spawn;
+
+            if (_cameraControl.TryGetComponent(out ICameraControl control))
+                _iCameraControl = control;
+
+            _camera = _iCameraControl.GetCamera();
         }
 
         private void Update()
@@ -62,7 +61,7 @@ namespace Test.LavaProject.Farm.Mechanica_UI
         public void FinishedFlowerBeds(int index, int experience, PlantTile tile)
         {
             _plantsReady.Add(index, tile);
-            _spawner.SetStatusReady(index);
+            _iSpawn.SetStatusReady(index);
             SetScoreExperience(experience);
             DelUITimer(ref tile);
         }
@@ -124,6 +123,11 @@ namespace Test.LavaProject.Farm.Mechanica_UI
                 plant.Value.transform.position = Vector2.Lerp(plant.Value.transform.position, targetPosition, Time.deltaTime * _fps);
                 plant.Value.TimeText.text = plant.Key.GetCurrentTime().ToString();
             }
+        }
+
+        public void SetScoreSystem(ScoreSystem system)
+        {
+            _scoreSystem = system;
         }
     }
 }
