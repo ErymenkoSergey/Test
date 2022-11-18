@@ -5,7 +5,7 @@ using System;
 
 namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants
 {
-    public class PlantTile : MonoBehaviour
+    public class PlantTile : BasePlant
     {
         private PlantType _currentPlantType;
 
@@ -31,8 +31,9 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants
 
             SetCarrotCount();
             PlantProcess(time);
-            StartCoroutine(Timer());
+            StartTimer();
         }
+
         private void SetCarrotCount()
         {
             if (_currentPlantType != PlantType.Carrot)
@@ -49,7 +50,12 @@ namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells.Plants
             }
         }
 
-        private IEnumerator Timer()
+        public void StartTimer()
+        {
+            StartCoroutine(Timer());
+        }
+
+        protected IEnumerator Timer()
         {
             while (_time > 0)
             {

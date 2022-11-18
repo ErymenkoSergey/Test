@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Test.LavaProject.Farm.Mechanica_Spawner.Planting
 {
-    public class PlantingSystem : MonoBehaviour, IPlantingSystem
+    public class PlantingSystem : BasePlant, IPlantingSystem
     {
         [SerializeField] private GameObject _presentor;
         private IUIPresentor _IUIPresentor;

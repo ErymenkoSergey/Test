@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Test.LavaProject.Farm.Mechanica_Spawner.Cells
 {
-    public class CellPrefab : MonoBehaviour, IClickable
+    public class CellPrefab : BasePlant, IClickable
     {
         private Spawner _spawner;
         private int _indexCell;
